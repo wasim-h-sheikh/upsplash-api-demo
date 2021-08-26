@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".presentation.shape.ShapeFragment">
+	<com.wasim.unsplashdemo.util.PaintView
+		android:id="@+id/paintView"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_alignParentTop="true"
+		android:layout_above="@+id/layoutActions"/>
+
+
+	<LinearLayout
+		android:id="@+id/layoutActions"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_alignParentBottom="true"
+		android:weightSum="3">
+		<ImageView
+			android:id="@+id/ivSquare"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_margin="8dp"
+			android:padding="4dp"
+			android:background="@color/teal_200"
+			android:src="@drawable/ic_square_44"
+			android:layout_height="wrap_content"/>
+		<ImageView
+			android:id="@+id/ivCircle"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_margin="8dp"
+			android:padding="4dp"
+			android:background="@color/teal_200"
+			android:src="@drawable/ic_outline_circle_24"
+			android:layout_height="wrap_content"/>
+		<ImageView
+			android:id="@+id/ivUndo"
+			android:layout_width="0dp"
+			android:layout_weight="1"
+			android:layout_margin="8dp"
+			android:padding="4dp"
+			android:background="@color/teal_200"
+			android:src="@drawable/ic_undo_24"
+			android:layout_height="wrap_content"/>
+	</LinearLayout>
+
+</RelativeLayout>
