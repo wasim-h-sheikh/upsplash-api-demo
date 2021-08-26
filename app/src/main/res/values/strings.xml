@@ -1,0 +1,11 @@
+<resources>
+	<string name="app_name">Unsplash API</string>
+	<string name="error_loading">Results could not be loaded</string>
+	<string name="shapes_fragment">Shape Fun</string>
+	<string name="unsplash_fragment">Unsplash Gallery</string>
+	<string name="title_activity_main">Jar Assignment</string>
+	<string name="next">Next</string>
+	<string name="previous">Previous</string>
+	<string name="home_fragment">Jar Assignment</string>
+
+</resources>
