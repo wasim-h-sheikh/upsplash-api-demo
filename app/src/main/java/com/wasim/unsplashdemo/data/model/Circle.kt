@@ -1,9 +1,9 @@
 package com.wasim.unsplashdemo.data.model
 
+import android.graphics.Point
 import com.wasim.unsplashdemo.util.SHAPE_RADIUS
 
 data class Circle(
-      val x:Float,
-     val y:Float,
+      val center:Point,
     val radius:Float=SHAPE_RADIUS
 )

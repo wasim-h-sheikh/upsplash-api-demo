@@ -25,10 +25,13 @@ const val SAFE_DISTANCE=5F
 class PaintView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private var drawPaint: Paint? = null
     private var canvas: Canvas? = null
-    private var currentX:Float=0F
-    private var currentY:Float=0F
+    private var currentPoint:Point?=null
     private var pendingAction:Int=-1
     private val shapeList= LinkedList<Any>()
+    private val pointList= LinkedList<Point>()
+    private var viewWidth:Int=0
+    private var viewHeight:Int=0
+
     init {
         setupPaint()
     }
@@ -56,11 +59,11 @@ class PaintView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
         shapeList.forEach { shape->
             if (shape is Circle){
                 drawPaint?.let {
-                    canvas?.drawCircle(shape.x,shape.y, SHAPE_RADIUS, it)
+                    canvas?.drawCircle(shape.center.x.toFloat()+ SHAPE_RADIUS,shape.center.y.toFloat()+ SHAPE_RADIUS, SHAPE_RADIUS, it)
                 }
             }else if (shape is Square){
                 drawPaint?.let {
-                    canvas?.drawRect(shape.left, shape.top, shape.right, shape.bottom, it)
+                    canvas?.drawRect(shape.left+ SHAPE_RADIUS, shape.top+ SHAPE_RADIUS, shape.right+ SHAPE_RADIUS, shape.bottom+ SHAPE_RADIUS, it)
                 }
             }
         }
@@ -71,21 +74,25 @@ class PaintView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
         if (pendingAction== ACTION_UNDO){
            return
         }
-        currentX+= 2*SHAPE_RADIUS+ SAFE_DISTANCE
-        currentY+= 2*SHAPE_RADIUS+ SAFE_DISTANCE
-
+        currentPoint?.let { pointList.add(it) }
+        currentPoint=RandomPointGenerator.nextPoint(pointList,viewWidth,viewHeight)
     }
     fun takeAction(action:Int){
         pendingAction=action
 
         when (action){
             ACTION_ADD_CIRCLE->
-                shapeList.add(Circle(currentX, currentY))
+                currentPoint?.let {
+                    shapeList.add(Circle(it))
+                }
+
 
             ACTION_ADD_SQUARE->
-                shapeList.add(Square(currentX,currentY,currentX- SHAPE_RADIUS,
-                    currentY- SHAPE_RADIUS,
-                    currentX+ SHAPE_RADIUS,currentY+ SHAPE_RADIUS))
+                currentPoint?.let { point->
+                    shapeList.add(Square(point.x- SHAPE_RADIUS,
+                        point.y- SHAPE_RADIUS,
+                        point.x+ SHAPE_RADIUS,point.y+ SHAPE_RADIUS)) }
+
 
             ACTION_UNDO->removeLastShape()
         }
@@ -97,22 +104,18 @@ class PaintView(context: Context?, attrs: AttributeSet?) : View(context, attrs) 
         if(shapeList.isEmpty()) {
             return
         }
-        val lastShape = shapeList.removeLast()
+        shapeList.removeLast()
         //restore the center x,y of last shape
-        if (lastShape is Circle) {
-            currentX = lastShape.x
-            currentY = lastShape.y
-        } else if (lastShape is Square) {
-            currentX = lastShape.x
-            currentY = lastShape.y
-        }
+        currentPoint=pointList.removeLast()
     }
 
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        currentX= 0F//(w / 2).toFloat()
-        currentY= 0F//(h / 2).toFloat()
+        viewHeight=h
+        viewWidth=w
+
+        currentPoint=RandomPointGenerator.nextPoint(pointList,viewWidth,viewHeight)
     }
 
 }
